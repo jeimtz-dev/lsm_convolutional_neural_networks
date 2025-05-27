@@ -1,0 +1,60 @@
+# Carpetas de imágenes
+lsm/
+test/
+basura/
+
+train_cnn_v1.h5
+
+# Archivos temporales
+*.log
+*.tmp
+*.swp
+*.bak
+*.old
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# IDEs y editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de entorno (Python)
+.env
+__pycache__/
+*.py[cod]
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Java / Gradle
+*.class
+*.jar
+*.war
+*.ear
+/build/
+/out/
+
+# React / Next.js / Vue
+dist/
+build/
+
+# Cache
+.cache/
+*.cache
+
+# Otros
+*.sqlite3
+*.db
+*.zip
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+*.iso
