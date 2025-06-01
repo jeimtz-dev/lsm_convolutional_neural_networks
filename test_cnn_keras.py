@@ -6,13 +6,13 @@ from pathlib import Path
 import mediapipe as mp
 
 # Cargar modelo entrenado
-modelo = tf.keras.models.load_model('CNN_KERAS.h5')
+modelo = tf.keras.models.load_model('train_cnn_v4.h5')
 
 # Mapeo de índices a letras (sin j, k, ñ, q, x, z)
 CLASES_LSM = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'Y']
 
 # Ruta base del conjunto de validación (con imágenes en carpetas 00-20)
-BASE_PATH = Path('./test/eval_v0')
+BASE_PATH = Path('./test/eval_v1')
 
 # Inicializar MediaPipe Hands
 mp_hands = mp.solutions.hands

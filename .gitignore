@@ -2,8 +2,10 @@
 lsm/
 test/
 basura/
+lsm2/
 
-train_cnn_v1.h5
+*.h5
+*.png
 
 # Archivos temporales
 *.log

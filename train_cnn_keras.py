@@ -3,15 +3,14 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.callbacks import TensorBoard
 import time
 
 # Configuraciones
 TAMANO_IMG = 200
-RUTA_DATASET = "lsm"
+RUTA_DATASET = "lsm2"
 NUM_CLASES = 21
 BATCH_SIZE = 64
-EPOCHS =20
+EPOCHS =100
 
 
 # Generador con aumento de datos para entrenamiento
@@ -23,7 +22,7 @@ datagen = ImageDataGenerator(
     shear_range=15,              # Cizallamiento aleatorio
     zoom_range=[0.7, 1.4],       # Zoom aleatorio
     horizontal_flip=True,        # Voltea horizontalmente
-    validation_split=0.30       # Separa un 30% de los datos para validación
+    validation_split=0.20       # Separa un 20% de los datos para validación
 )
 
 # Generador de datos de entrenamiento (85% del total)
@@ -34,10 +33,10 @@ train_generator = datagen.flow_from_directory(
     batch_size=BATCH_SIZE,
     class_mode='categorical',              # Etiquetas codificadas como one-hot
     subset='training',                     # Usa el subconjunto de entrenamiento
-    shuffle=True                           # Mezcla aleatoriamente las imágenes
+    shuffle=True,                           # Mezcla aleatoriamente las imágenes
 )
 
-# Generador de datos de validación (15% del total)
+# Generador de datos de validación (30% del total)
 val_generator = datagen.flow_from_directory(
     RUTA_DATASET,
     target_size=(TAMANO_IMG, TAMANO_IMG),
@@ -45,7 +44,7 @@ val_generator = datagen.flow_from_directory(
     batch_size=BATCH_SIZE,
     class_mode='categorical',
     subset='validation',
-    shuffle=True
+    shuffle=True,
 )
 
 modeloCNN2_AD = tf.keras.models.Sequential([
@@ -58,6 +57,7 @@ modeloCNN2_AD = tf.keras.models.Sequential([
     tf.keras.layers.Dropout(0.5),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(256, activation='relu'),
+    tf.keras.layers.Dropout(0.4),
     tf.keras.layers.Dense(NUM_CLASES, activation='softmax')
 ])
 
@@ -67,20 +67,23 @@ modeloCNN2_AD.compile(
     metrics=['accuracy']
 )
 
-# Entrenamiento
-tensorboard = TensorBoard(log_dir='CNN_KERAS_V2_LOGS/CNN_KERAS')
-
 inicio = time.time()
-modeloCNN2_AD.fit(
+history = modeloCNN2_AD.fit(
     train_generator,
     epochs=EPOCHS,
     validation_data=val_generator,
     steps_per_epoch=train_generator.samples // BATCH_SIZE,
-    validation_steps=val_generator.samples // BATCH_SIZE,
-    callbacks=[tensorboard]
+    validation_steps=val_generator.samples // BATCH_SIZE
 )
+
 fin = time.time()
 duracion = fin - inicio
-print("Duracion: "+ duracion)
-# Guardar modelo
-modeloCNN2_AD.save("CNN_KERAS_v2.h5")
+print(f"Duración: {duracion:.2f} segundos")
+
+modeloCNN2_AD.save("train_cnn_v4.h5")
+
+# graficar
+plt.plot(history.history['accuracy'], label='Entrenamiento')
+plt.plot(history.history['val_accuracy'], label='Validación')
+plt.legend()
+plt.show()
