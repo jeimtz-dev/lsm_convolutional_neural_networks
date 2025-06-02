@@ -10,7 +10,7 @@ TAMANO_IMG = 200
 RUTA_DATASET = "lsm2"
 NUM_CLASES = 21
 BATCH_SIZE = 64
-EPOCHS =100
+EPOCHS = 30
 
 
 # Generador con aumento de datos para entrenamiento
@@ -54,10 +54,10 @@ modeloCNN2_AD = tf.keras.models.Sequential([
     tf.keras.layers.MaxPooling2D(2, 2),
     tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
     tf.keras.layers.MaxPooling2D(2, 2),
-    tf.keras.layers.Dropout(0.5),
     tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(256, activation='relu'),
-    tf.keras.layers.Dropout(0.4),
+    tf.keras.layers.Dropout(0.5),
+    tf.keras.layers.Dense(512, activation='relu'),
+    tf.keras.layers.Dropout(0.5),
     tf.keras.layers.Dense(NUM_CLASES, activation='softmax')
 ])
 
@@ -80,7 +80,7 @@ fin = time.time()
 duracion = fin - inicio
 print(f"Duración: {duracion:.2f} segundos")
 
-modeloCNN2_AD.save("train_cnn_v4.h5")
+modeloCNN2_AD.save("train_cnn_v3.h5")
 
 # graficar
 plt.plot(history.history['accuracy'], label='Entrenamiento')

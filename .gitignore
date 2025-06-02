@@ -4,6 +4,7 @@ test/
 basura/
 lsm2/
 
+*.tflite
 *.h5
 *.png
 
