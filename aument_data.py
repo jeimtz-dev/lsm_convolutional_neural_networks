@@ -1,10 +1,15 @@
 import os
 import cv2
 import numpy as np
+from tensorflow.keras.preprocessing.image import ImageDataGenerator, img_to_array
 
-RUTA_ORIGEN = 'lsm'  # dataset original
-RUTA_DESTINO = 'lsm2'  # nuevo dataset con imágenes originales + espejo
+RUTA_ORIGEN = 'lsm'         # Dataset original
+RUTA_DESTINO = 'lsm_aument'  # Dataset aumentado
 
+# Aumentos aleatorios (sin flip, porque se hace uno manual)
+AUMENTOS_POR_IMAGEN = 6  # Aumentos aleatorios aparte del espejo y la original
+
+# Recorremos todas las clases
 for clase in os.listdir(RUTA_ORIGEN):
     ruta_clase_origen = os.path.join(RUTA_ORIGEN, clase)
     ruta_clase_destino = os.path.join(RUTA_DESTINO, clase)
@@ -17,10 +22,33 @@ for clase in os.listdir(RUTA_ORIGEN):
         if img is None:
             continue
 
-        # Guarda imagen original
-        cv2.imwrite(os.path.join(ruta_clase_destino, img_name), img)
+        base_name = os.path.splitext(img_name)[0]
 
-        # Crea y guarda imagen espejada
+        # Guarda imagen original intacta
+        cv2.imwrite(os.path.join(ruta_clase_destino, f"{base_name}_original.jpg"), img)
+
+        # Crea y guarda imagen espejada manualmente
         espejo = cv2.flip(img, 1)
-        nombre_espejo = f"mirror_{img_name}"
-        cv2.imwrite(os.path.join(ruta_clase_destino, nombre_espejo), espejo)
+        cv2.imwrite(os.path.join(ruta_clase_destino, f"{base_name}_mirror.jpg"), espejo)
+
+        # Generador sin flip (para evitar aleatoriedad del flip)
+        datagen = ImageDataGenerator(
+            rescale=1./255,
+            rotation_range=30,
+            width_shift_range=0.2,
+            height_shift_range=0.2,
+            shear_range=15,
+            zoom_range=[0.7, 1.4],
+            fill_mode='nearest'
+        )
+
+        img_array = img_to_array(img)
+        img_array = np.expand_dims(img_array, 0)
+        gen = datagen.flow(img_array, batch_size=1)
+
+        # 6 aumentos aleatorios
+        for i in range(AUMENTOS_POR_IMAGEN):
+            batch = next(gen)[0] * 255  # Desnormaliza
+            batch = np.clip(batch, 0, 255).astype(np.uint8)
+            nombre_aug = f"{base_name}_aug{i}.jpg"
+            cv2.imwrite(os.path.join(ruta_clase_destino, nombre_aug), batch)

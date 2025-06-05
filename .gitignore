@@ -3,6 +3,7 @@ lsm/
 test/
 basura/
 lsm2/
+lsm_aument/
 
 *.tflite
 *.h5
