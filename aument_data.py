@@ -6,8 +6,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator, img_to_arra
 RUTA_ORIGEN = 'lsm'         # Dataset original
 RUTA_DESTINO = 'lsm_aument'  # Dataset aumentado
 
-# Aumentos aleatorios (sin flip, porque se hace uno manual)
-AUMENTOS_POR_IMAGEN = 6  # Aumentos aleatorios aparte del espejo y la original
+AUMENTOS_POR_IMAGEN = 6  # Aumentos aleatorios 
 
 # Recorremos todas las clases
 for clase in os.listdir(RUTA_ORIGEN):
@@ -31,7 +30,7 @@ for clase in os.listdir(RUTA_ORIGEN):
         espejo = cv2.flip(img, 1)
         cv2.imwrite(os.path.join(ruta_clase_destino, f"{base_name}_mirror.jpg"), espejo)
 
-        # Generador sin flip (para evitar aleatoriedad del flip)
+        # Generador
         datagen = ImageDataGenerator(
             rescale=1./255,
             rotation_range=30,
@@ -46,7 +45,7 @@ for clase in os.listdir(RUTA_ORIGEN):
         img_array = np.expand_dims(img_array, 0)
         gen = datagen.flow(img_array, batch_size=1)
 
-        # 6 aumentos aleatorios
+        # aumentos aleatorios
         for i in range(AUMENTOS_POR_IMAGEN):
             batch = next(gen)[0] * 255  # Desnormaliza
             batch = np.clip(batch, 0, 255).astype(np.uint8)
