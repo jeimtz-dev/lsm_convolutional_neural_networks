@@ -23,11 +23,11 @@ if not cap.isOpened():
 
 for clase in CLASES:
     letra = CLASES_LSM[clase]
-    ruta_ref = os.path.join(REF_DIR, f"{clase}.png")
+    ruta_ref = os.path.join(REF_DIR, f"{clase}.jpg")
     #carpeta_guardado = f'../data/new_test/{clase}/'
     #os.makedirs(carpeta_guardado, exist_ok=True)
 
-    carpeta_base_guardado = os.path.join(os.getcwd(), 'data', 'new_test')
+    carpeta_base_guardado = os.path.join(os.getcwd(), 'test', 'eval_v1')
     carpeta_guardado = os.path.join(carpeta_base_guardado, str(clase))
     os.makedirs(carpeta_guardado, exist_ok=True)
 
@@ -37,7 +37,7 @@ for clase in CLASES:
         continue
     img_ref = cv2.resize(img_ref, (200, 200)) 
 
-    archivos_existentes = [f for f in os.listdir(carpeta_guardado) if f.startswith("foto_") and f.endswith(".png")]
+    archivos_existentes = [f for f in os.listdir(carpeta_guardado) if f.startswith("foto_") and f.endswith(".jpg")]
     indices = [int(f.split("_")[1].split(".")[0]) for f in archivos_existentes if "_" in f]
     foto_contador = max(indices) + 1 if indices else 0
 
@@ -74,7 +74,7 @@ for clase in CLASES:
                     print("[!] Error al capturar frame.")
                     break
 
-                nombre_foto = os.path.join(carpeta_guardado, f'foto_{foto_contador}.png')
+                nombre_foto = os.path.join(carpeta_guardado, f'foto_{foto_contador}.jpg')
                 cv2.imwrite(nombre_foto, frame_actual)
                 print(f'[✓] Foto {i+1}/{NUM_FOTOS} guardada: {nombre_foto}')
                 foto_contador += 1

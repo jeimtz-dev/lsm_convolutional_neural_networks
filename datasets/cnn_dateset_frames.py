@@ -47,7 +47,7 @@ def segmentar_mano_procesada(imagen_bgr):
 # === Captura por clase ===
 for clase in CLASES:
     letra = CLASES_LSM[clase]
-    ruta_ref = os.path.join(REF_DIR, f"{clase}.png")
+    ruta_ref = os.path.join(REF_DIR, f"{clase}.jpg")
     carpeta_guardado = os.path.join(CARPETA_DESTINO, str(clase))
     os.makedirs(carpeta_guardado, exist_ok=True)
 
@@ -59,7 +59,7 @@ for clase in CLASES:
     img_ref = cv2.resize(img_ref, (TAMANO_IMG, TAMANO_IMG))
 
     # Contador de fotos ya existentes
-    archivos = [f for f in os.listdir(carpeta_guardado) if f.startswith("foto_") and f.endswith(".png")]
+    archivos = [f for f in os.listdir(carpeta_guardado) if f.startswith("foto_") and f.endswith(".jpg")]
     indices = [int(f.split("_")[1].split(".")[0]) for f in archivos if "_" in f]
     foto_contador = max(indices) + 1 if indices else 0
 

@@ -10,7 +10,7 @@ TAMANO_IMG = 200
 RUTA_DATASET = "lsm_aument"
 NUM_CLASES = 21
 BATCH_SIZE = 64
-EPOCHS = 70
+EPOCHS = 100
 
 datagen = ImageDataGenerator(
     rescale=1./255,              
@@ -46,9 +46,13 @@ modeloCNN2_AD = tf.keras.models.Sequential([
     tf.keras.layers.MaxPooling2D(2, 2),
     tf.keras.layers.Conv2D(256, (3,3), activation='relu'),
     tf.keras.layers.MaxPooling2D(2, 2),
+    tf.keras.layers.Conv2D(512, (3,3), activation='relu'),
+    tf.keras.layers.MaxPooling2D(2, 2),
+    tf.keras.layers.Conv2D(512, (3,3), activation='relu'),
+    tf.keras.layers.MaxPooling2D(2, 2),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dropout(0.5),
-    tf.keras.layers.Dense(256, activation='relu'),
+    tf.keras.layers.Dense(512, activation='relu'),
     tf.keras.layers.Dropout(0.3),
     tf.keras.layers.Dense(NUM_CLASES, activation='softmax')
 ])
@@ -72,7 +76,7 @@ fin = time.time()
 duracion = fin - inicio
 print(f"Duración: {duracion:.2f} segundos")
 
-modeloCNN2_AD.save("train_cnn_v3.h5")
+modeloCNN2_AD.save("train_cnn_v4.h5")
 
 plt.plot(history.history['accuracy'], label='Entrenamiento')
 plt.plot(history.history['val_accuracy'], label='Validación')

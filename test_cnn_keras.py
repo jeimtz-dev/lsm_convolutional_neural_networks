@@ -6,7 +6,7 @@ from pathlib import Path
 import mediapipe as mp
 
 # Cargar modelo entrenado
-modelo = tf.keras.models.load_model('train_cnn_v3.h5')
+modelo = tf.keras.models.load_model('train_cnn_v4.h5')
 
 # Mapeo de índices a letras (sin j, k, ñ, q, x, z)
 CLASES_LSM = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'Y']
